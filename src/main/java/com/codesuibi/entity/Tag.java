@@ -11,13 +11,11 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Accessors(chain = true)
 @ToString
-public class User {
+@Accessors(chain = true)
+public class Tag {
     private String id;
     private String name;
-    private String password;
-    private String status;
-    private Date regtime;
-    private String role;
+    private String type;
+    private Date createtime;
 }

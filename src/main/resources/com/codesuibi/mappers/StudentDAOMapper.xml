@@ -1,0 +1,175 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.codesuibi.dao.StudentDAO">
+
+
+    <resultMap id="studentMap" type="Student">
+        <id column="id" property="id" />
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="bir" property="bir"/>
+        <result column="phone" property="phone"/>
+        <result column="qq" property="qq"/>
+        <result column="mark" property="mark"/>
+        <result column="attr" property="attr"/>
+        <result column="starts" property="starts"/>
+        <result column="cityid" property="cityid"/>
+        <result column="clazzid" property="clazzid"/>
+        <result column="groupid" property="groupid"/>
+        <result column="studentNumber" property="studentNumber"/>
+
+        <association property="city" javaType="City">
+            <id column="cid" property="id" />
+            <result column="cname" property="name"/>
+            <result column="cnumbers" property="numbers"/>
+            <result column="ccreatetime" property="createtime"/>
+        </association>
+
+        <association property="clazz" javaType="Clazz">
+            <id column="clid" property="id" />
+            <result column="clname" property="name"/>
+        </association>
+
+        <association property="group" javaType="Group">
+            <id column="gid" property="id" />
+            <result column="gname" property="name"/>
+            <result column="gcontent" property="content"/>
+            <result column="gclazzid" property="clazzid"/>
+        </association>
+
+        <collection property="tags" javaType="list" ofType="Tag">
+            <id column="tid" property="id" />
+            <result column="tname" property="name"/>
+        </collection>
+
+    </resultMap>
+
+    <!--  findByGroupId -->
+    <select id="findByGroupId" resultMap="studentMap">
+        select s.id,s.student_number as studentNumber,s.name,s.age,s.bir,s.phone,s.qq,s.attr,s.starts,s.mark,s.cityid,s.clazzid,s.groupid,c.id as cid,c.`name` as cname,c.numbers as cnumbers,c.createtime as ccreatetime,cl.id as clid,cl.`name` as clname,g.id as gid,g.`name` as gname,g.content as gcontent,g.clazzid as gclazzid,t.`name` as tname
+        from t_student s
+        left join t_city c
+        on s.cityid = c.id
+        left join t_clazz cl
+        on s.clazzid = cl.id
+        left join t_group g
+        on s.groupid = g.id
+        left join t_student_tag ts
+        on s.id = ts.studentid
+        left join t_tag t
+        on ts.tagid = t.id
+        where s.groupid = #{groupId}
+    </select>
+
+    <select id="findAll" resultMap="studentMap">
+        select s.id,s.student_number as studentNumber,s.name,s.age,s.bir,s.phone,s.qq,s.attr,s.starts,s.mark,s.cityid,s.clazzid,s.groupid,c.id as cid,c.`name` as cname,c.numbers as cnumbers,c.createtime as ccreatetime,cl.id as clid,cl.`name` as clname,g.id as gid,g.`name` as gname,g.content as gcontent,g.clazzid as gclazzid,t.`name` as tname
+        from t_student s
+        left join t_city c
+        on s.cityid = c.id
+        left join t_clazz cl
+        on s.clazzid = cl.id
+        left join t_group g
+        on s.groupid = g.id
+        left join t_student_tag ts
+        on s.id = ts.studentid
+        left join t_tag t
+        on ts.tagid = t.id
+    </select>
+
+    <select id="find" resultMap="studentMap">
+        select s.id,s.student_number as studentNumber,s.name,s.age,s.bir,s.phone,s.qq,s.attr,s.starts,s.mark,s.cityid,s.clazzid,s.groupid,c.id as cid,c.`name` as cname,c.numbers as cnumbers,c.createtime as ccreatetime,cl.id as clid,cl.`name` as clname,g.id as gid,g.`name` as gname,g.content as gcontent,g.clazzid as gclazzid,t.`name` as tname
+        from t_student s
+        left join t_city c
+        on s.cityid = c.id
+        left join t_clazz cl
+        on s.clazzid = cl.id
+        left join t_group g
+        on s.groupid = g.id
+        left join t_student_tag ts
+        on s.id = ts.studentid
+        left join t_tag t
+        on ts.tagid = t.id
+        <where>
+            <if test="searchCol != null and searchCol != '' and searchValue != null and searchValue != ''">
+                ${searchCol} like concat('%',#{searchValue},'%')
+            </if>
+        </where>
+
+    </select>
+
+    <!-- findPageAndLike -->
+
+    <select id="totalCounts" resultType="int">
+        select count(distinct s.id)
+        from t_student s
+        left join t_city c
+        on s.cityid = c.id
+        left join t_clazz cl
+        on s.clazzid = cl.id
+        left join t_group g
+        on s.groupid = g.id
+        left join t_student_tag ts
+        on s.id = ts.studentid
+        left join t_tag t
+        on ts.tagid = t.id
+        <where>
+            <if test="searchCol != null and searchCol != '' and searchValue != null and searchValue != ''">
+                ${searchCol} like concat('%',#{searchValue},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- selectMaxStudentNumber -->
+    <select id="selectMaxStudentNumber" resultType="int">
+        SELECT max(student_number) FROM `t_student`
+    </select>
+
+    <!-- selectMaxStudentNumber -->
+    <insert id="save" parameterType="Student" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `student_system`.`t_student`(`id`, `name`, `age`, `bir`, `phone`, `qq`, `attr`, `starts`, `mark`, `cityid`, `clazzid`, `groupid`, `student_number`) VALUES (#{id}, #{name}, #{age}, #{bir}, #{phone}, #{qq},#{attr}, #{starts}, #{mark}, #{cityid}, #{clazzid}, #{groupid}, #{studentNumber});
+    </insert>
+
+
+    <select id="findPageAndLike" resultMap="studentMap">
+        SELECT
+        s.id,
+        s.student_number as studentNumber,
+        s.NAME,
+        s.age,
+        s.bir,
+        s.phone,
+        s.qq,
+        s.attr,
+        s.STARTS,
+        s.mark,
+        s.cityid,
+        s.clazzid,
+        s.groupid,
+        c.id AS cid,
+        c.`name` AS cname,
+        c.numbers AS cnumbers,
+        c.createtime AS ccreatetime,
+        cl.id AS clid,
+        cl.`name` AS clname,
+        g.id AS gid,
+        g.`name` AS gname,
+        g.content AS gcontent,
+        g.clazzid AS gclazzid,
+        t.`name` AS tname
+        FROM
+        (select * from t_student limit #{start},#{pageSize}) s
+        LEFT JOIN t_city c ON s.cityid = c.id
+        LEFT JOIN t_clazz cl ON s.clazzid = cl.id
+        LEFT JOIN t_group g ON s.groupid = g.id
+        LEFT JOIN t_student_tag ts ON s.id = ts.studentid
+        LEFT JOIN t_tag t ON ts.tagid = t.id
+        <where>
+            <if test="searchCol != null and searchCol != '' and searchValue != null and searchValue != ''">
+                ${searchCol} like concat('%',#{searchValue},'%')
+            </if>
+        </where>
+
+    </select>
+
+
+</mapper>

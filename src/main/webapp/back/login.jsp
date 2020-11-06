@@ -62,11 +62,23 @@
 </html>
 
 <script>
+    $(function () {
 
+        //绑定登录按钮的单击事件
+        $("#logBtn").click(function () {
+            $.post("${pageContext.request.contextPath}/user/login", $("#inputForm").serialize(), function (res) {
+                if(res.status){
+                    alert(res.msg+",点击确定进入主页");
+                    location.href='${pageContext.request.contextPath}/back/index.jsp';
+                }else{
+                    alert(res.msg);
+                }
+            })
+        });
         //更换验证码
         $("#image").click(function () {
             $(this).attr("src", "${pageContext.request.contextPath}/user/getImage?id=" + Math.random());
         })
 
-
+    })
 </script>

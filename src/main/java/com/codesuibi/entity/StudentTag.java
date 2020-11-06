@@ -6,18 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString
-public class User {
+public class StudentTag {
     private String id;
-    private String name;
-    private String password;
-    private String status;
-    private Date regtime;
-    private String role;
+    private String studentid;
+    private String tagid;
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.codesuibi.dao.ClazzDAO">
+
+    <resultMap id="clazzMap" type="Clazz">
+        <id column="id" property="id"/>
+        <result column="name" property="name" />
+        <result column="tagid" property="tagid" />
+
+        <association property="tag" javaType="Tag">
+            <id column="tid" property="id" />
+            <result column="tname" property="name" />
+            <result column="type" property="type" />
+            <result column="createtime" property="createtime" />
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultMap="clazzMap">
+        select
+            c.id,
+            c.`name`,
+            c.tagid,
+            t.id as tid,
+            t.`name` as tname,
+            t.type,
+            t.createtime
+        from
+            t_clazz c left join t_tag t
+        on c.tagid = t.id
+    </select>
+
+    <insert id="save" parameterType="Clazz" useGeneratedKeys="true" keyProperty="id">
+        insert into t_clazz values(#{id},#{name},#{tagid});
+    </insert>
+
+    <select id="findByName" resultMap="clazzMap" parameterType="String">
+        select
+            c.id,
+            c.`name`,
+            c.tagid,
+            t.id as tid,
+            t.`name` as tname,
+            t.type,
+            t.createtime
+        from
+            t_clazz c left join t_tag t
+        on c.tagid = t.id where c.`name` = #{name}
+    </select>
+
+
+
+</mapper>

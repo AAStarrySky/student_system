@@ -1,0 +1,28 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.codesuibi.dao.CityDAO">
+
+
+    <select id="findAll" resultType="City">
+        select id,name,createtime,numbers from t_city;
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="City">
+        insert into t_city values(#{id},#{name},#{createtime},#{numbers})
+    </insert>
+
+    <!-- City findByName(String name); -->
+    <select id="findByName" parameterType="String" resultType="City">
+        select id,name,createtime,numbers from t_city where name = #{name};
+    </select>
+
+    <select id="findById" parameterType="String" resultType="City">
+        select id,name,createtime,numbers from t_city where id = #{id};
+    </select>
+
+    <!-- update -->
+    <update id="update" parameterType="City">
+        UPDATE `student_system`.`t_city` SET  `numbers` = #{numbers} WHERE `id` = #{id};
+    </update>
+
+</mapper>

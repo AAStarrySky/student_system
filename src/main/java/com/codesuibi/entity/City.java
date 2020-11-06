@@ -13,11 +13,9 @@ import java.util.Date;
 @NoArgsConstructor
 @Accessors(chain = true)
 @ToString
-public class User {
+public class City {
     private String id;
     private String name;
-    private String password;
-    private String status;
-    private Date regtime;
-    private String role;
+    private Date createtime;
+    private Integer numbers;
 }

@@ -6,18 +6,23 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Accessors(chain = true)
 @ToString
-public class User {
+@Accessors(chain = true)
+public class Group {
     private String id;
     private String name;
-    private String password;
-    private String status;
-    private Date regtime;
-    private String role;
+    private String content;
+    private String clazzid;
+
+    private Clazz clazz;
+
+    private List<String> tags = new ArrayList<>();
+
+
 }
